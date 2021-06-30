@@ -1,23 +1,35 @@
 package lib
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Block struct {
-	id string 
+	id string
 	timestamp time.Time
-	next_block []*Block
-	prev_block *Block
-	
+	next []*Block
+	prev *Block
 	//transactions []Transaction
 }
 
-func NewBlock(id string, timestamp time.Time) *Block {
-	block := &Block{
-		id,
-		timestamp,
-		nil,
-		nil,
+func NewBlock() *Block {
+	return &Block{
+		id: uuid.NewString(),
+		timestamp: time.Now(),
+		next: make([]*Block, 0),
+		prev: nil,
 	}
-	
-	return block
 }
+
+func AddTransaction(
+	amount float64,
+	sender string,
+	recipient string,
+	sender_prev_tx string,    // Will become a tx pointer
+	recipient_prev_tx string, // ^^
+	// ptr TxPointer
+	signature string,
+	hash string,
+) { /* TODO */ }
