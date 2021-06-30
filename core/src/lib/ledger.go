@@ -10,9 +10,8 @@ type Ledger struct {
 	genesis *Block
 }
 
+// Ledger constructor - creates the genesis block
 func NewLedger() *Ledger {
-
-	// Construct the genesis block
 	return &Ledger{
 		genesis: &Block{
 			id: "genesis",
@@ -23,7 +22,12 @@ func NewLedger() *Ledger {
 	}
 }
 
-// Connect a new block to an existing one
+// Returns the genesis block
+func (L* Ledger) Genesis() *Block {
+	return L.genesis
+}
+
+// Connects a new block to an existing one
 func (L *Ledger) AddBlock(new_block *Block, predecessor *Block) {
 	new_block.prev = predecessor
 	predecessor.next = append(predecessor.next, new_block)
