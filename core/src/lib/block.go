@@ -1,3 +1,7 @@
+//
+// A block containing a list of transactions and pointers to the next/last blocks
+//
+
 package lib
 
 import (
@@ -25,6 +29,17 @@ func NewBlock() *Block {
 	}
 }
 
+//////// Getters \\\\\\\\
+
+func (B *Block) GetID() string { return B.id }
+func (B *Block) GetTimestamp() time.Time { return B.timestamp }
+func (B *Block) GetNext() []*Block { return B.next }
+func (B *Block) GetPrev() *Block { return B.prev }
+
+//////// Utilities \\\\\\\\
+
+func (B *Block) NumBranches() int { return len(B.next) }
+
 // Formats and prints a block's contents
 func (B *Block) Print() {
 	var prev_formatted, next_formatted string
@@ -36,10 +51,10 @@ func (B *Block) Print() {
 	}
 
 	if (B.next == nil || len(B.next) == 0) {
-		next_formatted = "None"
+		next_formatted = "[]"
 	} else {
 		for idx, block := range B.next {
-			next_formatted += fmt.Sprintf("  > #%v: %v\n", idx, block.id)
+			next_formatted += fmt.Sprintf("\n  > #%v: %v", idx, block.id)
 		}
 	}
 
@@ -51,7 +66,7 @@ func (B *Block) Print() {
 	fmt.Println("-------------------------")
 }
 
-func (B *Block) AddTransaction(
+/*func (B *Block) AddTransaction(
 	amount float64,
 	sender string,
 	recipient string,
@@ -60,4 +75,5 @@ func (B *Block) AddTransaction(
 	// ptr TxPointer
 	signature string,
 	hash string,
-) { /* TODO */ }
+) {}
+*/
