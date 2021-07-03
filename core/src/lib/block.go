@@ -77,3 +77,5 @@ func (B *Block) Print() {
 	hash string,
 ) {}
 */
+
+/*func (B *Block) AddTransaction(tx Transaction) {} */
