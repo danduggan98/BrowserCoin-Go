@@ -6,21 +6,21 @@ import (
 	"fmt"
 )
 
-// Hashes a string with SHA-256, returning both the
-// raw bytes and the hex encoding of the hash.
-func HashString(str string) ([]byte, string) {
+// Hashes a string with SHA-256
+func HashString(str string) []byte {
 	hash := sha256.New()
 	hash.Write([]byte(str))
 
-	hashBytes := hash.Sum(nil)
-	hashString := hex.EncodeToString(hashBytes)
-
-	return hashBytes, hashString
+	return hash.Sum(nil)
 }
 
-// Concatenate and hash the transaction's properties,
-// returning both the raw bytes and the hex encoding of the hash.
-func HashTransaction(tx* Transaction) ([]byte, string) {
+// Converts a hash to a hexadecimal string
+func StringFromHash(hash []byte) string {
+	return hex.EncodeToString(hash)
+}
+
+// Concatenates and hashes a transaction's properties
+func HashTransaction(tx* Transaction) []byte {
 	tx_str := fmt.Sprintf("%v%v%v%v%v", tx.timestamp, tx.amount, tx.sender, tx.recipient, tx.signature)
 	return HashString(tx_str)
 }

@@ -7,7 +7,6 @@ import (
 )
 
 type Transaction struct {
-	hash string
 	timestamp time.Time
 	amount uint64
 	sender rsa.PublicKey
@@ -15,7 +14,8 @@ type Transaction struct {
 	//sender_prev_tx string    // Will become a TxPointer
 	//recipient_prev_tx string // ^^
 	// ptr TxPointer
-	signature string
+	signature []byte
+	hash []byte
 }
 
 func NewTransaction(
@@ -24,30 +24,29 @@ func NewTransaction(
 	recipient rsa.PublicKey,
 ) *Transaction {
 	return &Transaction{
-		hash: "",
 		timestamp: time.Now(),
 		amount: amount,
 		sender: sender,
 		recipient: recipient,
-		signature: "",
+		signature: make([]byte, 0),
+		hash: make([]byte, 0),
 	}
 }
 
 // Sign a transaction with a private key
-func (T *Transaction) Sign(pk *rsa.PrivateKey) {
-	tx_hash, _ := HashTransaction(T)
-	sig, err := rsa.SignPKCS1v15(nil, pk, crypto.SHA256, tx_hash)
+func (T *Transaction) Sign(private_key *rsa.PrivateKey) {
+	tx_hash := HashTransaction(T)
+	sig, err := rsa.SignPKCS1v15(nil, private_key, crypto.SHA256, tx_hash)
 
 	if err != nil {
 		panic(err)
 	}
 
-	T.signature = string(sig)
+	T.signature = sig
 }
 
 func (T *Transaction) Hash() {
-	_, tx_hash := HashTransaction(T)
-	T.hash = tx_hash
+	T.hash = HashTransaction(T)
 }
 
 // Cryptographically verify a transaction's signature
