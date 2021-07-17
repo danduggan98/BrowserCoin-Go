@@ -79,13 +79,13 @@ func (T * Transaction) Print() {
 	if (len(T.signature) == 0) {
 		sig_formatted = "None"
 	} else {
-		sig_formatted = string(T.signature)
+		sig_formatted = StringFromHash(T.signature)
 	}
 
 	if (len(T.hash) == 0) {
 		hash_formatted = "None"
 	} else {
-		hash_formatted = string(T.signature)
+		hash_formatted = StringFromHash(T.hash)
 	}
 
 	fmt.Println("----- Transaction Details -----")
