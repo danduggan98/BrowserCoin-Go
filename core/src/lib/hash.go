@@ -28,7 +28,7 @@ func AddressFromKey(key *rsa.PublicKey) string {
 
 // Concatenates and hashes a transaction's properties
 func HashTransaction(tx* Transaction) []byte {
-	tx_str := fmt.Sprintf("%v%v%v%v%v", tx.timestamp, tx.amount, tx.sender, tx.recipient, tx.signature)
+	tx_str := fmt.Sprintf("%v%v%v%v", tx.timestamp, tx.amount, tx.sender, tx.recipient)
 	return HashString(tx_str)
 }
 
