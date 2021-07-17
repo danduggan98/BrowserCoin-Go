@@ -16,7 +16,9 @@ type Block struct {
 	timestamp time.Time
 	next []*Block
 	prev *Block
-	//transactions []Transaction
+	// transactions []Transaction
+	// hash string
+	// prev_hash string
 }
 
 // Block constructor

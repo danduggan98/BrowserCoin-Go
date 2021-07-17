@@ -2,6 +2,7 @@ package lib
 
 import (
 	"crypto"
+	"crypto/rand"
 	"crypto/rsa"
 	"time"
 )
@@ -9,8 +10,8 @@ import (
 type Transaction struct {
 	timestamp time.Time
 	amount uint64
-	sender rsa.PublicKey
-	recipient rsa.PublicKey
+	sender *rsa.PublicKey
+	recipient *rsa.PublicKey
 	//sender_prev_tx string    // Will become a TxPointer
 	//recipient_prev_tx string // ^^
 	// ptr TxPointer
@@ -20,8 +21,8 @@ type Transaction struct {
 
 func NewTransaction(
 	amount uint64,
-	sender rsa.PublicKey,
-	recipient rsa.PublicKey,
+	sender *rsa.PublicKey,
+	recipient *rsa.PublicKey,
 ) *Transaction {
 	return &Transaction{
 		timestamp: time.Now(),
@@ -36,7 +37,7 @@ func NewTransaction(
 // Sign a transaction with a private key
 func (T *Transaction) Sign(private_key *rsa.PrivateKey) {
 	tx_hash := HashTransaction(T)
-	sig, err := rsa.SignPKCS1v15(nil, private_key, crypto.SHA256, tx_hash)
+	sig, err := rsa.SignPKCS1v15(rand.Reader, private_key, crypto.SHA256, tx_hash)
 
 	if err != nil {
 		panic(err)
@@ -50,7 +51,25 @@ func (T *Transaction) Hash() {
 }
 
 // Cryptographically verify a transaction's signature
-func (T *Transaction) IsValid() { /* TODO */ }
+// and check that transaction has correct values
+func (T *Transaction) IsValid() (bool, string) {
+
+	if (len(T.signature) == 0) {
+		return false, "Transaction not signed"
+	}
+
+	if (len(T.hash) == 0) {
+		return false, "Transaction not hashed"
+	}
+
+	err := rsa.VerifyPKCS1v15(T.sender, crypto.SHA256, T.hash, T.signature)
+
+	if (err != nil) {
+		return false, "Cryptographic verification failed"
+	}
+
+	return true, ""
+}
 
 // Display the transaction's contents
 func (T * Transaction) Print() { /* TODO */ }
