@@ -35,8 +35,8 @@ func NewTransaction(
 	}
 }
 
-// Sign a transaction with a private key
-func (T *Transaction) Sign(private_key *rsa.PrivateKey) {
+// Sign a transaction with a private key, then store its hash
+func (T *Transaction) SignAndHash(private_key *rsa.PrivateKey) {
 	tx_hash := HashTransaction(T)
 	sig, err := rsa.SignPKCS1v15(rand.Reader, private_key, crypto.SHA256, tx_hash)
 
@@ -45,14 +45,10 @@ func (T *Transaction) Sign(private_key *rsa.PrivateKey) {
 	}
 
 	T.signature = sig
+	T.hash = tx_hash
 }
 
-func (T *Transaction) Hash() {
-	T.hash = HashTransaction(T)
-}
-
-// Cryptographically verify a transaction's signature
-// and check that transaction has correct values
+// Verify a transaction's signature and properties
 func (T *Transaction) IsValid() (bool, string) {
 
 	if (len(T.signature) == 0) {
