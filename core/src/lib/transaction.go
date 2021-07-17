@@ -4,6 +4,7 @@ import (
 	"crypto"
 	"crypto/rand"
 	"crypto/rsa"
+	"fmt"
 	"time"
 )
 
@@ -72,4 +73,25 @@ func (T *Transaction) IsValid() (bool, string) {
 }
 
 // Display the transaction's contents
-func (T * Transaction) Print() { /* TODO */ }
+func (T * Transaction) Print() {
+	var sig_formatted, hash_formatted string
+
+	if (len(T.signature) == 0) {
+		sig_formatted = "None"
+	} else {
+		sig_formatted = string(T.signature)
+	}
+
+	if (len(T.hash) == 0) {
+		hash_formatted = "None"
+	} else {
+		hash_formatted = string(T.signature)
+	}
+
+	fmt.Println("----- Transaction Details -----")
+	fmt.Printf(
+		"- Timestamp: %v\n- Amount: %v\n- Sender: %v\n- Recipient: %v\n- Signature: %v\n- Hash: %v\n",
+		T.timestamp, T.amount, AddressFromKey(T.sender), AddressFromKey(T.recipient), sig_formatted, hash_formatted,
+	)
+	fmt.Println("-------------------------------")
+}

@@ -26,6 +26,7 @@ func TestTx(t *testing.T) {
 
 	// Valid transaction
 	tx1 := lib.NewTransaction(50, &sender.PublicKey, &recipient.PublicKey)
+	tx1.Print()
 	tx1.Sign(sender)
 	tx1.Hash()
 
@@ -37,6 +38,7 @@ func TestTx(t *testing.T) {
 
 	// Invalid transaction - signed by wrong person
 	tx2 := lib.NewTransaction(5000, &sender.PublicKey, &recipient.PublicKey)
+	tx2.Print()
 	tx2.Sign(recipient) // Attempt to steal funds
 	tx2.Hash()
 
@@ -45,4 +47,7 @@ func TestTx(t *testing.T) {
 	if (tx2_valid == true) {
 		t.Error("Transaction should be invalid, but succeeded")
 	}
+
+	// Invalid transaction - not signed
+	// TODO
 }
