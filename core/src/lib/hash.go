@@ -13,6 +13,12 @@ func HashString(str string) []byte {
 	return hash[:]
 }
 
+// Hashes a byte array with SHA-256
+func HashBytes(bytes []byte) []byte {
+	hash := sha256.Sum256(bytes)
+	return hash[:]
+}
+
 // Converts a hash to a hexadecimal string
 func StringFromHash(hash []byte) string {
 	return hex.EncodeToString(hash)
@@ -32,4 +38,17 @@ func HashTransaction(tx* Transaction) []byte {
 	return HashString(tx_str)
 }
 
-func HashBlock (block* Block) { /* TODO */ }
+func HashTransactionList (txs []*Transaction) []byte {
+	list_str := make([]byte, 0)
+
+	for _, tx := range txs {
+		list_str = append(list_str, HashTransaction(tx)...)
+	}
+
+	return list_str
+}
+
+func HashBlock (block* Block) []byte {
+	block_str := fmt.Sprintf("%v%v%v", block.timestamp, block.prev_hash, HashTransactionList(block.transactions))
+	return HashString(block_str)
+}

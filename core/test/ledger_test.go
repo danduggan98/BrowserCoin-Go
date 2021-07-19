@@ -13,10 +13,10 @@ func TestLedger(t *testing.T) {
 	ledger := lib.NewLedger()
 	genesis_block := ledger.Genesis()
 
-	fmt.Println("Genesis block:")
+	fmt.Println("\nGenesis block:")
 	genesis_block.Print()
 
-	fmt.Println("Adding new blocks:")
+	fmt.Println("\nAdding new blocks:")
 	block1 := lib.NewBlock()
 	block2 := lib.NewBlock()
 

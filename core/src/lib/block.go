@@ -7,40 +7,46 @@ package lib
 import (
 	"fmt"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type Block struct {
-	id string
 	timestamp time.Time
 	next []*Block
 	prev *Block
-	// transactions []Transaction
-	// hash string
-	// prev_hash string
+	transactions []*Transaction
+	hash []byte
+	prev_hash []byte
 }
 
 // Block constructor
 func NewBlock() *Block {
-	return &Block{
-		id: uuid.NewString(),
+	block := &Block{
 		timestamp: time.Now(),
 		next: make([]*Block, 0),
 		prev: nil,
+		transactions: make([]*Transaction, 0),
+		hash: make([]byte, 0),
+		prev_hash: make([]byte, 0),
 	}
+
+	block.UpdateHash()
+	return block
 }
 
 //////// Getters \\\\\\\\
 
-func (B *Block) GetID() string { return B.id }
 func (B *Block) GetTimestamp() time.Time { return B.timestamp }
 func (B *Block) GetNext() []*Block { return B.next }
 func (B *Block) GetPrev() *Block { return B.prev }
+func (B *Block) GetTransactions() []*Transaction { return B.transactions }
+func (B *Block) GetHash() []byte { return B.hash }
+func (B *Block) GetPrevHash() []byte { return B.prev_hash }
 
 //////// Utilities \\\\\\\\
 
 func (B *Block) NumBranches() int { return len(B.next) }
+
+func (B *Block) UpdateHash() { B.hash = HashBlock(B) }
 
 // Formats and prints a block's contents
 func (B *Block) Print() {
@@ -49,35 +55,23 @@ func (B *Block) Print() {
 	if (B.prev == nil) {
 		prev_formatted = "None"
 	} else {
-		prev_formatted = B.prev.id
+		prev_formatted = StringFromHash(B.prev.hash)
 	}
 
 	if (B.next == nil || len(B.next) == 0) {
 		next_formatted = "[]"
 	} else {
 		for idx, block := range B.next {
-			next_formatted += fmt.Sprintf("\n  > #%v: %v", idx, block.id)
+			next_formatted += fmt.Sprintf("\n  > #%v: %v", idx, StringFromHash(block.hash))
 		}
 	}
 
 	fmt.Println("----- Block Details -----")
 	fmt.Printf(
-		"- ID: %v\n- Timestamp: %v\n- Next Block: %v\n- Previous Block: %v\n",
-		B.id, B.timestamp, next_formatted, prev_formatted,
+		"- Timestamp: %v\n- Next Block: %v\n- Previous Block: %v\n- Hash: %v\n",
+		B.timestamp, next_formatted, prev_formatted, StringFromHash(B.hash),
 	)
 	fmt.Println("-------------------------")
 }
-
-/*func (B *Block) AddTransaction(
-	amount float64,
-	sender string,
-	recipient string,
-	sender_prev_tx string,    // Will become a tx pointer
-	recipient_prev_tx string, // ^^
-	// ptr TxPointer
-	signature string,
-	hash string,
-) {}
-*/
 
 /*func (B *Block) AddTransaction(tx Transaction) {} */

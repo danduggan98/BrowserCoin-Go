@@ -12,14 +12,16 @@ type Ledger struct {
 
 // Ledger constructor - creates the genesis block
 func NewLedger() *Ledger {
-	return &Ledger{
-		genesis: &Block{
-			id: "genesis",
-			timestamp: time.Now(),
-			next: make([]*Block, 0),
-			prev: nil,
-		},
+	genesis_block := &Block{
+		timestamp: time.Now(),
+		next: make([]*Block, 0),
+		prev: nil,
+		transactions: make([]*Transaction, 0),
+		prev_hash: nil,
 	}
+
+	genesis_block.UpdateHash()
+	return &Ledger{ genesis_block }
 }
 
 // Returns the genesis block
