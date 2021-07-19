@@ -35,6 +35,17 @@ func NewTransaction(
 	}
 }
 
+//////// Getters \\\\\\\\
+
+func (T *Transaction) GetTimestamp() time.Time { return T.timestamp }
+func (T *Transaction) GetAmount() uint64 { return T.amount }
+func (T *Transaction) GetSender() *rsa.PublicKey { return T.sender }
+func (T *Transaction) GetRecipient() *rsa.PublicKey { return T.recipient }
+func (T *Transaction) GetSignature() []byte { return T.signature }
+func (T *Transaction) GetHash() []byte { return T.hash }
+
+//////// Utilities \\\\\\\\
+
 // Sign a transaction with a private key, then store its hash
 func (T *Transaction) SignAndHash(private_key *rsa.PrivateKey) {
 	tx_hash := HashTransaction(T)
