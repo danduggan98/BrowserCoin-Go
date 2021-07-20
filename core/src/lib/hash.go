@@ -49,6 +49,6 @@ func HashTransactionList (txs []*Transaction) []byte {
 }
 
 func HashBlock (block* Block) []byte {
-	block_str := fmt.Sprintf("%v%v%v", block.timestamp, block.prev_hash, HashTransactionList(block.transactions))
+	block_str := fmt.Sprintf("%v%v%v", block.timestamp, block.GetPrevHash(), HashTransactionList(block.transactions))
 	return HashString(block_str)
 }

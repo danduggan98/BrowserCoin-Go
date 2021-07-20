@@ -17,7 +17,6 @@ func NewLedger() *Ledger {
 		next: make([]*Block, 0),
 		prev: nil,
 		transactions: make([]*Transaction, 0),
-		prev_hash: nil,
 	}
 
 	genesis_block.UpdateHash()
