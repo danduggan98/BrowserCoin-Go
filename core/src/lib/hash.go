@@ -38,6 +38,7 @@ func HashTransaction(tx* Transaction) []byte {
 	return HashString(tx_str)
 }
 
+// Hashes the combined contents of a list of transactions
 func HashTransactionList (txs []*Transaction) []byte {
 	list_str := make([]byte, 0)
 
@@ -48,6 +49,7 @@ func HashTransactionList (txs []*Transaction) []byte {
 	return list_str
 }
 
+// Hashes the combined contents of a block
 func HashBlock (block* Block) []byte {
 	block_str := fmt.Sprintf("%v%v%v", block.timestamp, block.GetPrevHash(), HashTransactionList(block.transactions))
 	return HashString(block_str)

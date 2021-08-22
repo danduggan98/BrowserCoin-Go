@@ -32,7 +32,7 @@ func (L* Ledger) Genesis() *Block {
 func (L *Ledger) AddBlock(new_block *Block, predecessor *Block) {
 	new_block.prev = predecessor
 	predecessor.next = append(predecessor.next, new_block)
+	new_block.UpdateHash()
 }
 
 func (L *Ledger) LongestValidChain() { /* TODO */ }
-func (L *Ledger) FindBlockByID() { /* TODO */ }
