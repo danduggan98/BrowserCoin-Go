@@ -1,3 +1,7 @@
+//
+// Cryptography tools for hashing, addresses, etc.
+//
+
 package lib
 
 import (
@@ -6,6 +10,13 @@ import (
 	"encoding/hex"
 	"fmt"
 )
+
+//////// HASHING \\\\\\\\
+
+// Converts a hash to a hexadecimal string
+func StringFromHash(hash []byte) string {
+	return hex.EncodeToString(hash)
+}
 
 // Hashes a string with SHA-256
 func HashString(str string) []byte {
@@ -17,19 +28,6 @@ func HashString(str string) []byte {
 func HashBytes(bytes []byte) []byte {
 	hash := sha256.Sum256(bytes)
 	return hash[:]
-}
-
-// Converts a hash to a hexadecimal string
-func StringFromHash(hash []byte) string {
-	return hex.EncodeToString(hash)
-}
-
-// Creates an address from a public key
-func AddressFromKey(key *rsa.PublicKey) string {
-	bytes := key.N.Bytes()
-	hash := sha256.Sum256(bytes)
-
-	return StringFromHash(hash[:])
 }
 
 // Concatenates and hashes a transaction's properties
@@ -53,4 +51,14 @@ func HashTransactionList (txs []*Transaction) []byte {
 func HashBlock (block* Block) []byte {
 	block_str := fmt.Sprintf("%v%v%v", block.timestamp, block.GetPrevHash(), HashTransactionList(block.transactions))
 	return HashString(block_str)
+}
+
+//////// ADDRESSES \\\\\\\\
+
+// Creates an address from a public key
+func AddressFromKey(key *rsa.PublicKey) string {
+	bytes := key.N.Bytes()
+	hash := sha256.Sum256(bytes)
+
+	return StringFromHash(hash[:])
 }
