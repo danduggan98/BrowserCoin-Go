@@ -2,8 +2,6 @@ package test
 
 import (
 	"bytes"
-	"crypto/rand"
-	"crypto/rsa"
 	"testing"
 
 	"github.com/danduggan98/BrowserCoin-Go/core/src/lib"
@@ -12,8 +10,8 @@ import (
 func TestMerkleTree(t *testing.T) {
 
 	// Addresses
-	sender, _ := rsa.GenerateKey(rand.Reader, 2048)
-	recipient, _ := rsa.GenerateKey(rand.Reader, 2048)
+	sender, _ := lib.NewRsaKey()
+	recipient, _ := lib.NewRsaKey()
 
 	// Create some txs
 	txs := make([]*lib.Transaction, 0)

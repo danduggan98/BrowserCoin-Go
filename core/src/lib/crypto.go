@@ -5,6 +5,7 @@
 package lib
 
 import (
+	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha256"
 	"encoding/hex"
@@ -53,7 +54,13 @@ func HashBlock (block* Block) []byte {
 	return HashString(block_str)
 }
 
-//////// ADDRESSES \\\\\\\\
+//////// KEYS + ADDRESSES \\\\\\\\
+
+// Generates a new RSA key
+func NewRsaKey() (*rsa.PrivateKey, error) {
+	const num_bits int = 2048
+	return rsa.GenerateKey(rand.Reader, num_bits)
+}
 
 // Creates an address from a public key
 func AddressFromKey(key *rsa.PublicKey) string {

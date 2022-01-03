@@ -1,8 +1,6 @@
 package test
 
 import (
-	"crypto/rand"
-	"crypto/rsa"
 	"testing"
 
 	"github.com/danduggan98/BrowserCoin-Go/core/src/lib"
@@ -12,13 +10,13 @@ import (
 func TestTx(t *testing.T) {
 
 	// Create two users
-	sender, sender_err := rsa.GenerateKey(rand.Reader, 2048)
+	sender, sender_err := lib.NewRsaKey()
 
 	if (sender_err != nil) {
 		panic(sender_err)
 	}
 
-	recipient, recipient_err := rsa.GenerateKey(rand.Reader, 2048)
+	recipient, recipient_err := lib.NewRsaKey()
 
 	if (recipient_err != nil) {
 		panic(recipient_err)
