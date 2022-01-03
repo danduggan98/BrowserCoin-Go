@@ -16,9 +16,16 @@ func TestLedger(t *testing.T) {
 	fmt.Println("\nGenesis block:")
 	genesis_block.Print()
 
+	// Create a list of txs for testing
+	sender, _ := lib.NewRsaKey()
+	recipient, _ := lib.NewRsaKey()
+
+	tx1 := lib.NewTransaction(111, &sender.PublicKey, &recipient.PublicKey).SignAndHash(sender)
+	tx_list := append(make([]*lib.Transaction, 0), tx1)
+
 	fmt.Println("\nAdding new blocks:")
-	block1 := lib.NewBlock()
-	block2 := lib.NewBlock()
+	block1 := lib.NewBlock(tx_list)
+	block2 := lib.NewBlock(tx_list)
 
 	ledger.AddBlock(block1, genesis_block)
 	ledger.AddBlock(block2, genesis_block)

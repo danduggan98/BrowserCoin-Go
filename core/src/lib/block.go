@@ -15,16 +15,18 @@ type Block struct {
 	prev *Block
 	transactions []*Transaction
 	hash []byte
+	merkle_root []byte
 }
 
 // Block constructor
-func NewBlock() *Block {
+func NewBlock(txs []*Transaction) *Block {
 	return &Block{
 		timestamp: time.Now(),
 		next: make([]*Block, 0),
 		prev: nil,
-		transactions: make([]*Transaction, 0),
+		transactions: txs,
 		hash: make([]byte, 0),
+		merkle_root: NewMerkleTree(txs).GetRootHash(),
 	}
 }
 
@@ -35,14 +37,21 @@ func (B *Block) GetNext() []*Block { return B.next }
 func (B *Block) GetPrev() *Block { return B.prev }
 func (B *Block) GetTransactions() []*Transaction { return B.transactions }
 func (B *Block) GetHash() []byte { return B.hash }
+func (B *Block) GetMerkleRoot() []byte { return B.merkle_root }
 
 //////// Utilities \\\\\\\\
 
 // Determines the number of successors to this block
 func (B *Block) NumBranches() int { return len(B.next) }
 
+// Determines the number of transactions in a block
+func (B *Block) NumTransactions() int { return len(B.transactions) }
+
 // Calculates and stores the block's hash
-func (B *Block) UpdateHash() { B.hash = HashBlock(B) }
+func (B *Block) UpdateHash() *Block {
+	B.hash = HashBlock(B)
+	return B
+}
 
 // Gets the hash of the previous block
 func (B *Block) GetPrevHash() []byte {
@@ -74,8 +83,8 @@ func (B *Block) Print() {
 
 	fmt.Println("----- Block Details -----")
 	fmt.Printf(
-		"- Timestamp: %v\n- Next Blocks: %v\n- Previous Block Hash: %v\n- Hash: %v\n",
-		B.timestamp, next_blocks, prev_hash_str, StringFromHash(B.hash),
+		"- Timestamp: %v\n- # Txs: %v\n- Next Blocks: %v\n- Previous Block Hash: %v\n- Hash: %v\n",
+		B.timestamp, B.NumTransactions(), next_blocks, prev_hash_str, StringFromHash(B.hash),
 	)
 	fmt.Println("-------------------------")
 }

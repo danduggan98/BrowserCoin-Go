@@ -16,11 +16,8 @@ func TestMerkleTree(t *testing.T) {
 	// Create some txs
 	txs := make([]*lib.Transaction, 0)
 
-	tx1 := lib.NewTransaction(111, &sender.PublicKey, &recipient.PublicKey)
-	tx2 := lib.NewTransaction(222, &sender.PublicKey, &recipient.PublicKey)
-	
-	tx1.SignAndHash(sender)
-	tx2.SignAndHash(sender)
+	tx1 := lib.NewTransaction(111, &sender.PublicKey, &recipient.PublicKey).SignAndHash(sender)
+	tx2 := lib.NewTransaction(222, &sender.PublicKey, &recipient.PublicKey).SignAndHash(sender)
 
 	txs = append(txs, tx1)
 	txs = append(txs, tx2)

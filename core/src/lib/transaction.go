@@ -47,7 +47,7 @@ func (T *Transaction) GetHash() []byte { return T.hash }
 //////// Utilities \\\\\\\\
 
 // Sign a transaction with a private key, then store its hash
-func (T *Transaction) SignAndHash(private_key *rsa.PrivateKey) {
+func (T *Transaction) SignAndHash(private_key *rsa.PrivateKey) *Transaction {
 	tx_hash := HashTransaction(T)
 	sig, err := rsa.SignPKCS1v15(rand.Reader, private_key, crypto.SHA256, tx_hash)
 
@@ -57,6 +57,8 @@ func (T *Transaction) SignAndHash(private_key *rsa.PrivateKey) {
 
 	T.signature = sig
 	T.hash = tx_hash
+
+	return T
 }
 
 // Verify a transaction's signature and properties

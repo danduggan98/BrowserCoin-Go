@@ -23,8 +23,7 @@ func TestTx(t *testing.T) {
 	}
 
 	// Valid transaction
-	tx1 := lib.NewTransaction(42, &sender.PublicKey, &recipient.PublicKey)
-	tx1.SignAndHash(sender)
+	tx1 := lib.NewTransaction(42, &sender.PublicKey, &recipient.PublicKey).SignAndHash(sender)
 	tx1.Print()
 
 	tx1_valid, tx1_invalid_reason := tx1.IsValid()
