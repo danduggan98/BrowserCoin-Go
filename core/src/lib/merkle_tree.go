@@ -16,13 +16,17 @@ type (
 	}
 
 	MerkleTree struct {
-		root_node *node
 		root_hash []byte
 	}
 )
 
 // Merkle tree constructor 
 func NewMerkleTree(transactions []*Transaction) *MerkleTree {
+
+	// Panic if no transactions provided
+	if len(transactions) == 0 {
+		panic("Merkle tree can not be constructed without transactions")
+	}
 	
 	// Odd number of transactions -> duplicate the last one
 	var tx_list []*Transaction = transactions[:]
@@ -38,7 +42,7 @@ func NewMerkleTree(transactions []*Transaction) *MerkleTree {
 	// Create leaf nodes for each transaction
 	for _, tx := range tx_list {
 		leaf := &node{
-			hash: tx.hash,
+			hash: tx.GetHash(),
 			left_child: nil,
 			right_child: nil,
 		}
@@ -46,29 +50,25 @@ func NewMerkleTree(transactions []*Transaction) *MerkleTree {
 		node_queue.Push(leaf)
 	}
 
+	// Combine pairs of nodes together
 	for node_queue.Size() > 1 {
-		first := node_queue.Pop().(node)
-		second := node_queue.Pop().(node)
+		first := node_queue.Pop().(*node)
+		second := node_queue.Pop().(*node)
 
 		combined_hashes := append(first.hash, second.hash...)
 		new_node := &node{
 			hash: HashBytes(combined_hashes),
-			left_child: &first,
-			right_child: &second,
+			left_child: first,
+			right_child: second,
 		}
 
 		node_queue.Push(new_node)
 	}
 
-	root := node_queue.Pop().(node)
-
-	return &MerkleTree{
-		root_node: &root,
-		root_hash: root.hash,
-	}
+	root := node_queue.Pop().(*node)
+	return &MerkleTree{ root.hash }
 }
 
-func (M *MerkleTree) GetRootNode () *node { return M.root_node }
 func (M *MerkleTree) GetRootHash () []byte { return M.root_hash }
 
 // TODO
